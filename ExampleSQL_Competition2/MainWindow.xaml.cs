@@ -164,7 +164,7 @@ namespace ExampleSQL_Competition2
                     }
                     line = reader.ReadLine();
                 }
-                // dataBase.Close();
+                
             }
             else
             {
@@ -265,10 +265,8 @@ namespace ExampleSQL_Competition2
         private void restButton_Click(object sender, RoutedEventArgs e)
         {
             // Drop tables and recreate tables.
-            // dataBase.Open();
             dropAllTables();
             createAllTables();
-            // dataBase.Close();
         }
 
         private void dropAllTables()
@@ -344,8 +342,8 @@ namespace ExampleSQL_Competition2
 
         private void editStageButton_Click(object sender, RoutedEventArgs e)
         {
-            // Edit This method links a stage to the start and end checkpoints for the stage
-            // call edit stage dialog if a stage is selected
+            // This method links a stage to the start and end checkpoints for the stage
+            
 
             SQLiteCommand sqlCmd;
             String comString;
@@ -355,9 +353,11 @@ namespace ExampleSQL_Competition2
             ArrayList   checkpoints;
             List<String> checkpointlist;
             // String cp;
+
             if (StagedataGrid.SelectedItem != null)
+            // calls edit stage dialog if a stage is selected
             {
-                stindex= StagedataGrid.SelectedIndex;
+                stindex = StagedataGrid.SelectedIndex;
                 DataRow[] rows = dt_stages.Select();
                 if (rows != null)
                 {
@@ -425,14 +425,6 @@ namespace ExampleSQL_Competition2
                     sqlCmd.CommandText = comString;
                     record = sqlCmd.ExecuteNonQuery();
                     SearchlistBox.Items.Add("Updated stage records " + record);
-                    // these values need to be updated in the stage selected in the list
-                    // SELECT cpID dt_checkpoint where cpname = CPs[0];
-                    // SELECT cpID dt_checkpoint where cpname = CPs[1];
-
-                    //rows[stindex][5] = beginindex;
-                    //rows[stindex][6] = endindex;
-                    // assume use UPDATE table_stage WHERE field_stagename = stagename 
-                    // field_begin = index CP[0] field_end = index of CP[1] ??
                 }
 
             }
@@ -479,9 +471,7 @@ namespace ExampleSQL_Competition2
             String comString = "SELECT * FROM " + table_checkpoint;
             sqlCmd.CommandText = comString;
             SQLiteDataReader query;
-
-           //  dataBase.Open();
-
+                       
             try
             {
                 query = sqlCmd.ExecuteReader();
@@ -489,15 +479,14 @@ namespace ExampleSQL_Competition2
             }
             catch (SQLiteException error)
             {
-               // dataBase.Close();
-                return entries;
-                //throw;
+               return entries;
+               // should handle error
             }
             while (query.Read())
             {
                 entries.Add(query.GetString(1));
             }
-           // dataBase.Close();
+           
             return entries;
         }
 
@@ -519,10 +508,7 @@ namespace ExampleSQL_Competition2
                // display all the entries in each table
                 String comString;
                 SQLiteCommand sqlCmd;
-
-
-                //  dataBase.Open();
-                // check if database is open?
+                           
 
                 // competitor 
                 sqlCmd = dataBase.CreateCommand();
@@ -583,10 +569,7 @@ namespace ExampleSQL_Competition2
 
         private void readButton_Click(object sender, RoutedEventArgs e)
         {
-
             loadfromDB();
-
-           
         }
 
         private void OFileDialog_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
@@ -601,7 +584,6 @@ namespace ExampleSQL_Competition2
             string line = reader.ReadLine();
             if (line != null )
             {
-                // dataBase.Open();
                 addrallydetails(line);
                 FilelistBox.Items.Add(line);
 
@@ -615,7 +597,7 @@ namespace ExampleSQL_Competition2
                 }
 
             }
-           //  dataBase.Close();
+          
         }
 
         private void addrallydetails(string details)

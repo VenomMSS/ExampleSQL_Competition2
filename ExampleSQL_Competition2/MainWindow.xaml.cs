@@ -61,12 +61,13 @@ namespace ExampleSQL_Competition2
         // fields in the stages table
         private static String field_stageName = "StageName";
         private static String field_ordinal = "StageOrd";
-        private static String field_units = "DistanceUnits";
+        private static String field_units = "Units";
         private static String field_distance = "Distance";
         private static String field_speed = "Speed";
         private static String field_Breaks = "Breaks_mins";
-        private static String field_begin = "StartcheckptFK";
-        private static String field_end = "EndcheckptFK";
+        private static String field_expectedInterval = "Totaltime";
+        private static String field_begin = "StartCPFK";
+        private static String field_end = "EndCPFK";
 
         // fields in the score table
         private static String field_competitor = "CompetitorFK";
@@ -326,8 +327,8 @@ namespace ExampleSQL_Competition2
             SQL_cmd.CommandText = "CREATE TABLE IF NOT EXISTS " + table_stage +
                " (stID integer primary key, " + field_stageName + " TEXT, " +
                 field_units + " TEXT, " +  field_distance + " INTEGER, " + 
-                field_speed + " INTEGER, " + field_Breaks + " INTEGER, " +
-                field_begin + " INTEGER, " + field_end + " INTEGER);";
+                field_speed + " INTEGER, " + field_Breaks + " INTEGER, " + 
+                field_expectedInterval + " TEXT, " +  field_begin + " INTEGER, " + field_end + " INTEGER);";
             SQL_cmd.ExecuteNonQuery();
             SQL_cmd.CommandText = "CREATE TABLE IF NOT EXISTS " + table_timing +
                " (_ID integer primary key, " + field_compFK + " INTEGER, " +
@@ -385,9 +386,9 @@ namespace ExampleSQL_Competition2
                     beginlabel.Content = CPs[0];
                     finishlabel.Content = CPs[1];
                     DataRow row = rows[stindex];
-                    row[6] = 1;
-                    row[7] = 2;
-                    SearchlistBox.Items.Add("stage " + row[1] + row[6]+ row[7]);
+                    row[7] = 1;
+                    row[8] = 2;
+                    SearchlistBox.Items.Add("stage " + row[1] + row[7]+ row[8]);
                     SearchlistBox.Items.Add("Begin " + CPs[0]);
                     SearchlistBox.Items.Add("End " + CPs[1]);
 
@@ -402,7 +403,7 @@ namespace ExampleSQL_Competition2
                     {
                         foundrow = datareader["cpID"].ToString();
                     }
-                    row[6] = int.Parse(foundrow);
+                    row[7] = int.Parse(foundrow);
 
                     // get end checkpoint
                     sqlCmd = dataBase.CreateCommand();
@@ -415,12 +416,12 @@ namespace ExampleSQL_Competition2
                     {
                         foundrow = datareader["cpID"].ToString();
                     }
-                    row[7] = int.Parse(foundrow);
+                    row[8] = int.Parse(foundrow);
 
                     // now update table_stage
                     sqlCmd = dataBase.CreateCommand();
-                    comString = "UPDATE stages SET StartcheckptFK = '"+row[6]+
-                        "' , EndcheckptFK = '"+ row[7]+"' WHERE StageName  = '" + row[1] + "'";
+                    comString = "UPDATE stages SET StartCPFK = '"+row[7]+
+                        "' , EndCPFK = '"+ row[8]+"' WHERE StageName  = '" + row[1] + "'";
                     sqlCmd.CommandText = comString;
                     record = sqlCmd.ExecuteNonQuery();
                     SearchlistBox.Items.Add("Updated stage records " + record);

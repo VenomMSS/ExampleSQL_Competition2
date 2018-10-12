@@ -464,6 +464,32 @@ namespace ExampleSQL_Competition2
 
         }
 
+        private String FindTiming(String Comp_Rec, String CP_Rec)
+        {
+            String comString, timing;
+            SQLiteCommand sqlCmd;
+
+            // create selection text
+            sqlCmd = dataBase.CreateCommand();
+            comString = "SELECT * FROM " + table_timing + " WHERE " + field_compFK + " = " + Comp_Rec + " AND " +
+                  field_chckptFK +" = " + CP_Rec +";";
+            sqlCmd.CommandText = comString;
+            foundAdapter = new SQLiteDataAdapter(sqlCmd);
+            // DataSet foundDataset = new DataSet();
+            ///foundAdapter.Fill(foundDataset, "My Table");
+            ///foundDataGrid.ItemsSource = foundDataset.CreateDataReader();
+            DataTable foundTimings = new DataTable("Found");
+            foundAdapter.Fill(foundTimings);
+            foundDataGrid.ItemsSource = foundTimings.DefaultView;
+            DataRow[] foundrows = foundTimings.Select();
+            DataRow first = foundrows[0];
+            // int r = Int32.Parse(first[0].ToString());
+            timing = first[3].ToString();
+            // this should populate data found into the founddatagrid
+            return timing;
+
+        }
+
         private List<String> get_checkpoints()
         {
             List<String> entries = new List<string>();
@@ -490,10 +516,71 @@ namespace ExampleSQL_Competition2
             return entries;
         }
 
+        // called when the user clicks the Calculate button
         private void button_Click(object sender, RoutedEventArgs e)
         {
+            // Check that all information required for the calculation is now present
+            // stages have link to chckpoints
+            String comString;
+            SQLiteCommand sqlCmd;
+            String findString = searcefor.Text;
+            String st_string, end_string;
+            DateTime starttime, endtime;
+            TimeSpan timeTaken;            
+            DataTable competitors = ds_competitors.Tables[0];
+            DataRow[] rows = competitors.Select();
+            DataRow[] stagedetails = dt_stages.Select();
+            int No_of_stages = stagedetails.Length;
+            DataRow thisStage;
+            int startCP_record, endCP_record;
+            int found;
+            int speed;
+            double distance, expected;
 
-        }
+            DataRow row;
+            int recordnumber;
+            int competitornumber;
+            int Nocompetitors = rows.Length;
+            // for each competitor
+            // for (int c = 0; c < Nocompetitors; c++)
+            for (int c = 0; c < 1; c++)
+            {
+                row = rows[c];
+                // parse to integers
+                //
+                recordnumber = Int32.Parse(row[0].ToString());
+                competitornumber = Int32.Parse(row[1].ToString());
+                SearchlistBox.Items.Add(recordnumber + " " + competitornumber + " " + row[2]);
+
+                // for each stage
+                for (int st = 0; st < No_of_stages; st++)
+                {
+                    thisStage = stagedetails[st];
+                    // read values from thisStage
+                    startCP_record = Int32.Parse(thisStage[7].ToString());
+                    endCP_record = Int32.Parse(thisStage[8].ToString());
+                    distance = Double.Parse(thisStage[3].ToString());
+                    speed = Int32.Parse(thisStage[4].ToString());
+                    expected = (distance * 60 / speed ) + Int32.Parse(thisStage[5].ToString());
+                    SearchlistBox.Items.Add(thisStage[1] + " " + startCP_record + " " + endCP_record);
+
+                    // need to search timing database for record which matches recordnumber and startCP_record
+                    st_string = FindTiming(row[0].ToString(), thisStage[7].ToString());
+                    SearchlistBox.Items.Add(recordnumber + " " + startCP_record + " " + st_string);
+                    starttime = DateTime.Parse(st_string);
+                    
+                    // need to search timing database for record which matches recordnumber and endCP_record
+                    end_string = FindTiming(row[0].ToString(), thisStage[8].ToString());
+                    SearchlistBox.Items.Add(recordnumber + " " + endCP_record + " " + end_string);
+                    endtime = DateTime.Parse(end_string);
+                    timeTaken = endtime - starttime;
+                    SearchlistBox.Items.Add("Datetime = " + starttime.ToLocalTime() + " - "
+                        + endtime.ToLocalTime() + " = " + timeTaken.TotalMinutes + " <> " + expected);
+
+                }
+            }
+
+            }
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {

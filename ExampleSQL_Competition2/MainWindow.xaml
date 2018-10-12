@@ -27,10 +27,10 @@
         <Label x:Name="label2" Content="Stages" HorizontalAlignment="Left" Margin="73,306,0,0" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="-0.375,5.923" Height="26" Width="40"/>
         <Label x:Name="label3" Content="Timing" HorizontalAlignment="Left" Margin="625,123,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="46"/>
         <Button x:Name="restButton" Content="Reset" HorizontalAlignment="Left" Margin="686,574,0,0" VerticalAlignment="Top" Width="75" Click="restButton_Click" Grid.Column="1" Height="20"/>
-        <Button x:Name="editStageButton" Content="EditStage" HorizontalAlignment="Left" Margin="359,491,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.24,0.4" Click="editStageButton_Click" Grid.Column="1" Height="20"/>
+        <Button x:Name="editStageButton" Content="Stage ~ CkPoint" HorizontalAlignment="Left" Margin="359,491,0,0" VerticalAlignment="Top" Width="109" RenderTransformOrigin="0.24,0.4" Click="editStageButton_Click" Grid.Column="1" Height="28"/>
         <Label x:Name="beginlabel" Content="Label" HorizontalAlignment="Left" Margin="359,531,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.211,0.192" Grid.Column="1" Height="26" Width="38"/>
         <Label x:Name="finishlabel" Content="Label" HorizontalAlignment="Left" Margin="461,531,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.211,0.192" Grid.Column="1" Height="26" Width="38"/>
-        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="565,491,0,0" VerticalAlignment="Top" Width="75" Click="button_Click" Grid.Column="1" Height="20"/>
+        <Button x:Name="button" Content="Calculate" HorizontalAlignment="Left" Margin="565,491,0,0" VerticalAlignment="Top" Width="75" Click="button_Click" Grid.Column="1" Height="20"/>
         <Button x:Name="btnExit" Content="EXIT" Grid.Column="1" HorizontalAlignment="Left" Margin="686,631,0,0" VerticalAlignment="Top" Width="75" Click="btnExit_Click" RenderTransformOrigin="0.493,-0.9" Height="20"/>
         <DataGrid x:Name="foundDataGrid" HorizontalAlignment="Left" Margin="37,491,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="143" Width="254"/>
         <TextBox x:Name="searcefor" Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="117,511,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="68"/>

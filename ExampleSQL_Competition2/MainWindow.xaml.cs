@@ -78,11 +78,15 @@ namespace ExampleSQL_Competition2
 
         OpenFileDialog OFileDialog;
         SQLiteConnection dataBase;
-        SQLiteDataAdapter rallyAdapter, compAdapter, checkptAdapter, stageAdapter, timingAdapter, foundAdapter;
+        SQLiteDataAdapter rallyAdapter, compAdapter, checkptAdapter,
+                          stageAdapter, timingAdapter, foundAdapter, scoreAdapter;
         String errorlog;
         DataSet ds_competitors, ds_checkpoints, ds_timings, ds_stages, ds_rally;
-        DataTable dt_stages;
-
+        DataTable dt_stages, dt_scores;
+        // default values for penalties
+        int time_allowed = 20;
+        int miss_penalty = 50;
+        int out_of_time_penalty = 25;
 
         public MainWindow()
         {
@@ -340,6 +344,21 @@ namespace ExampleSQL_Competition2
             SQL_cmd.ExecuteNonQuery();
         }
 
+        private void ResetScores_Click(object sender, RoutedEventArgs e)
+        {
+            SQLiteCommand SQL_cmd;
+            SQL_cmd = dataBase.CreateCommand();
+            // drop score table
+            SQL_cmd.CommandText = "DROP TABLE " + table_scores;
+            SQL_cmd.ExecuteNonQuery();
+
+            SQL_cmd.CommandText = "CREATE TABLE IF NOT EXISTS " + table_scores +
+               " (scID integer primary key, " + field_competitor + " INTEGER, " +
+                field_stage + " INTEGER, " + field_timetaken + " FLOAT, " +
+                field_score + " INTEGER);";
+            SQL_cmd.ExecuteNonQuery();
+        }
+
         private void editStageButton_Click(object sender, RoutedEventArgs e)
         {
             // This method links a stage to the start and end checkpoints for the stage
@@ -485,13 +504,19 @@ namespace ExampleSQL_Competition2
             
             DataTable foundTimings = new DataTable("Found");
             foundAdapter.Fill(foundTimings);
-            foundDataGrid.ItemsSource = foundTimings.DefaultView;
-            DataRow[] foundrows = foundTimings.Select();
-            DataRow first = foundrows[0];
-            // int r = Int32.Parse(first[0].ToString());
-            timing = first[3].ToString();
-            // this should populate data found into the founddatagrid
-            return timing;
+            if (foundTimings.Rows.Count == 0)
+            {
+                // no row returned
+                timing = "missing";
+            } else
+            { foundDataGrid.ItemsSource = foundTimings.DefaultView;
+                DataRow[] foundrows = foundTimings.Select();
+                DataRow first = foundrows[0];
+                // int r = Int32.Parse(first[0].ToString());
+                timing = first[3].ToString();
+                // this should populate data found into the founddatagrid 
+            }
+                return timing;
 
         }
 
@@ -538,12 +563,12 @@ namespace ExampleSQL_Competition2
             int No_of_stages = stagedetails.Length;
             DataRow thisStage;
             int startCP_record, endCP_record, stage_rec;
-            int found;
+            int found, points;
             int speed;
             double distance, expected;
 
             DataRow row;
-            int recordnumber;
+            int recordnumber, pointss;
             int competitornumber;
             int Nocompetitors = rows.Length;
             // for each competitor
@@ -573,24 +598,49 @@ namespace ExampleSQL_Competition2
                     // need to search timing database for record which matches recordnumber and startCP_record
                     st_string = FindTiming(row[0].ToString(), thisStage[7].ToString());
                     SearchlistBox.Items.Add(recordnumber + " " + startCP_record + " " + st_string);
-                    starttime = DateTime.Parse(st_string);
+                    
                     
                     // need to search timing database for record which matches recordnumber and endCP_record
                     end_string = FindTiming(row[0].ToString(), thisStage[8].ToString());
                     SearchlistBox.Items.Add(recordnumber + " " + endCP_record + " " + end_string);
-                    endtime = DateTime.Parse(end_string);
-                    timeTaken = endtime - starttime;
-                    SearchlistBox.Items.Add("Datetime = " + starttime.ToLocalTime() + " - "
-                        + endtime.ToLocalTime() + " = " + timeTaken.TotalMinutes + " <> " + expected);
-                    int points = (Int32)Math.Abs(timeTaken.TotalMinutes - expected);
-                    sqlCmd = dataBase.CreateCommand();
-                    comString = "INSERT INTO " + table_scores + " (" +
-                        field_competitor + ", " + field_stage + ", " + field_timetaken + ", " +
-                        field_score + ") VALUES ('" 
-                        + recordnumber + "', '" + stage_rec + "' , '" + timeTaken.TotalMinutes + "' , '" +
-                        points  +  "' );";
-                    sqlCmd.CommandText = comString;
-                    sqlCmd.ExecuteNonQuery();
+
+                    if (st_string.Equals("missing") || end_string.Equals("missing"))
+                    {
+                        // at least one timing is missing
+                        SearchlistBox.Items.Add("Timing is missing  Start " + st_string + " - End "
+                        + end_string + " Missing penalty " + "<> " + expected);
+                        points = miss_penalty; // should be missing penalty
+                        sqlCmd = dataBase.CreateCommand();
+                        comString = "INSERT INTO " + table_scores + " (" +
+                            field_competitor + ", " + field_stage + ", " + field_timetaken + ", " +
+                            field_score + ") VALUES ('"
+                            + recordnumber + "', '" + stage_rec + "' , '" + 0 + "' , '" +
+                            points + "' );";
+                        sqlCmd.CommandText = comString;
+                        sqlCmd.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        starttime = DateTime.Parse(st_string);
+                        endtime = DateTime.Parse(end_string);
+                        timeTaken = endtime - starttime;
+                        SearchlistBox.Items.Add("Datetime = " + starttime.ToLocalTime() + " - "
+                            + endtime.ToLocalTime() + " = " + timeTaken.TotalMinutes + " <> " + expected);
+                        points = (Int32)Math.Abs(timeTaken.TotalMinutes - expected);
+                        if (timeTaken.Minutes > time_allowed)
+                        {
+                            points = out_of_time_penalty;
+                        }
+                        sqlCmd = dataBase.CreateCommand();
+                        comString = "INSERT INTO " + table_scores + " (" +
+                            field_competitor + ", " + field_stage + ", " + field_timetaken + ", " +
+                            field_score + ") VALUES ('"
+                            + recordnumber + "', '" + stage_rec + "' , '" + timeTaken.TotalMinutes + "' , '" +
+                            points + "' );";
+                        sqlCmd.CommandText = comString;
+                        sqlCmd.ExecuteNonQuery();
+                    }
+                    
 
                 }
             }
@@ -657,7 +707,10 @@ namespace ExampleSQL_Competition2
                 timingAdapter.Fill(ds_timings, "timingTable");
                 TimingdataGrid.ItemsSource = ds_timings.CreateDataReader();
 
-                // rally
+            // rally
+                SearchlistBox.Items.Add("time_allowed " + time_allowed);
+                SearchlistBox.Items.Add("out of time penalty " + out_of_time_penalty);
+                SearchlistBox.Items.Add("missed penalty " + miss_penalty);
                 sqlCmd = dataBase.CreateCommand();
                 comString = "SELECT * FROM " + table_rally;
                 sqlCmd.CommandText = comString;
@@ -665,9 +718,26 @@ namespace ExampleSQL_Competition2
                 ds_rally = new DataSet();
                 rallyAdapter.Fill(ds_rally, "rallyTable");
                 RallydataGrid.ItemsSource = ds_rally.CreateDataReader();
+                time_allowed = Int32.Parse(ds_rally.Tables[0].Rows[0][6].ToString());
+                out_of_time_penalty = Int32.Parse(ds_rally.Tables[0].Rows[0][7].ToString());
+                miss_penalty = Int32.Parse(ds_rally.Tables[0].Rows[0][8].ToString());
+                SearchlistBox.Items.Add("time_allowed " + time_allowed);
+                SearchlistBox.Items.Add("out of time penalty " + out_of_time_penalty);
+                SearchlistBox.Items.Add("missed penalty " + miss_penalty);
 
-                
-            }
+
+            // scores
+                sqlCmd = dataBase.CreateCommand();
+                comString = "SELECT * FROM " + table_scores;
+                sqlCmd.CommandText = comString;
+                scoreAdapter = new SQLiteDataAdapter(sqlCmd);
+                dt_scores = new DataTable("Scores");
+                scoreAdapter.Fill(dt_scores);
+                scoresDataGrid.ItemsSource = dt_scores.DefaultView;
+
+
+
+        }
 
         private void readButton_Click(object sender, RoutedEventArgs e)
         {

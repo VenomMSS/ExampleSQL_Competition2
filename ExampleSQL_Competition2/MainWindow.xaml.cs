@@ -628,7 +628,7 @@ namespace ExampleSQL_Competition2
                         SearchlistBox.Items.Add("Datetime = " + starttime.ToLocalTime() + " - "
                             + endtime.ToLocalTime() + " = " + timeTaken.TotalMinutes + " <> " + expected);
                         points = (Int32)Math.Abs(timeTaken.TotalMinutes - expected);
-                        if (timeTaken.Minutes > time_allowed)
+                        if (points > time_allowed)
                         {
                             points = out_of_time_penalty;
                         }

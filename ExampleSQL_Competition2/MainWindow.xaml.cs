@@ -554,7 +554,7 @@ namespace ExampleSQL_Competition2
             String comString;
             SQLiteCommand sqlCmd;
             String findString = searcefor.Text;
-            String st_string, end_string;
+            String st_string, end_string, dispString;
             DateTime starttime, endtime;
             TimeSpan timeTaken;            
             DataTable competitors = ds_competitors.Tables[0];
@@ -572,6 +572,7 @@ namespace ExampleSQL_Competition2
             int competitornumber;
             int Nocompetitors = rows.Length;
             // for each competitor
+            SearchlistBox.Items.Clear();
             for (int c = 0; c < Nocompetitors; c++)
             //for (int c = 0; c < 1; c++)
             {
@@ -580,7 +581,7 @@ namespace ExampleSQL_Competition2
                 //
                 recordnumber = Int32.Parse(row[0].ToString());
                 competitornumber = Int32.Parse(row[1].ToString());
-                SearchlistBox.Items.Add(recordnumber + " " + competitornumber + " " + row[2]);
+                SearchlistBox.Items.Add("c ="+c+" "+recordnumber + " " + competitornumber + " " + row[2]);
 
                 // for each stage
                 for (int st = 0; st < No_of_stages; st++)

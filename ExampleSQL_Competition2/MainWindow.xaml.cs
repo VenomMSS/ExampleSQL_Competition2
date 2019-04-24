@@ -95,7 +95,7 @@ namespace ExampleSQL_Competition2
             InitializeComponent();
 
             // version number in connection string  is the SQLite version and needs to be set to 3.
-            connectionString = "Data Source =c:\\Databases\\XYZcompetitionNEW3.db;Version=3;New=True;Compress=True;";
+            connectionString = "Data Source =c:\\Databases\\Rally2019.db;Version=3;New=True;Compress=True;";
             dataBase = new SQLiteConnection(connectionString);
             dataBase.Open();
            

@@ -7,38 +7,44 @@
         mc:Ignorable="d"
         Title="TimingApp" Height="700.901" Width="1117.824">
     <Grid Margin="10,0,0,1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="77*"/>
+            <RowDefinition Height="593*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="56*"/>
             <ColumnDefinition Width="219*"/>
         </Grid.ColumnDefinitions>
-        <DataGrid x:Name="RallydataGrid" HorizontalAlignment="Left" Height="71" Margin="25,47,0,0" VerticalAlignment="Top" Width="836" Grid.Column="1"/>
-        <DataGrid x:Name="CompetitordataGrid" HorizontalAlignment="Left" Margin="25,154,0,0" VerticalAlignment="Top" Height="147" Width="541" Grid.Column="1"/>
-        <DataGrid x:Name="CheckpointdataGrid" HorizontalAlignment="Right" Height="135" Margin="0,337,310,0" VerticalAlignment="Top" Width="105" Grid.Column="1"/>
-        <DataGrid x:Name="StagedataGrid" HorizontalAlignment="Left" Height="135" Margin="25,337,0,0" VerticalAlignment="Top" Width="357" Grid.Column="1"/>
-        <DataGrid x:Name="TimingdataGrid" HorizontalAlignment="Left" Margin="594,148,0,0" VerticalAlignment="Top" Height="324" Width="267" Grid.Column="1"/>
-        <ListBox x:Name="FilelistBox" HorizontalAlignment="Left" Height="133" Margin="37,47,0,0" VerticalAlignment="Top" Width="168"/>
-        <ListBox x:Name="SearchlistBox" HorizontalAlignment="Left" Height="144" Margin="37,238,0,0" VerticalAlignment="Top" Width="168"/>
-        <Button x:Name="setupfilebutton" Content="Setup File" HorizontalAlignment="Left" Margin="37,199,0,0" VerticalAlignment="Top" Width="75" Click="setupfilebutton_Click" Height="20"/>
-        <Button x:Name="searchbutton" Content="Search" HorizontalAlignment="Left" Margin="83,400,0,0" VerticalAlignment="Top" Width="75" Height="20"/>
-        <Button x:Name="readButton" Content="Display Data" HorizontalAlignment="Left" Margin="213,549,0,0" VerticalAlignment="Top" Width="110" Click="readButton_Click" Grid.Column="1" Height="20"/>
-        <Button x:Name="timeFileButton" Content="Timing File" HorizontalAlignment="Left" Margin="130,199,0,0" VerticalAlignment="Top" Width="75" Click="timeFileButton_Click" Height="20"/>
-        <Label x:Name="label" Content="Competitor" HorizontalAlignment="Left" Margin="73,123,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="70"/>
-        <Label x:Name="label1" Content="Checkpoint" HorizontalAlignment="Left" Margin="461,306,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="70"/>
-        <Label x:Name="label2" Content="Stages" HorizontalAlignment="Left" Margin="73,306,0,0" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="-0.375,5.923" Height="26" Width="40"/>
-        <Label x:Name="label3" Content="Timing" HorizontalAlignment="Left" Margin="625,123,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="46"/>
-        <Button x:Name="restButton" Content="Reset" HorizontalAlignment="Left" Margin="262,624,0,0" VerticalAlignment="Top" Width="74" Click="restButton_Click" Grid.Column="1" Height="20"/>
-        <Button x:Name="editStageButton" Content="~Link~" HorizontalAlignment="Left" Margin="404,392,0,0" VerticalAlignment="Top" Width="38" RenderTransformOrigin="0.24,0.4" Click="editStageButton_Click" Grid.Column="1" Height="28"/>
-        <Label x:Name="beginlabel" Content="Label" HorizontalAlignment="Left" Margin="326,491,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.211,0.192" Grid.Column="1" Height="26" Width="38"/>
-        <Label x:Name="finishlabel" Content="Label" HorizontalAlignment="Left" Margin="326,517,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.211,0.192" Grid.Column="1" Height="26" Width="38"/>
-        <Button x:Name="button" Content="Calculate" HorizontalAlignment="Left" Margin="234,574,0,0" VerticalAlignment="Top" Width="74" Click="button_Click" Grid.Column="1" Height="20"/>
-        <Button x:Name="btnExit" Content="EXIT" Grid.Column="1" HorizontalAlignment="Left" Margin="367,624,0,0" VerticalAlignment="Top" Width="75" Click="btnExit_Click" RenderTransformOrigin="0.493,-0.9" Height="20"/>
-        <DataGrid x:Name="foundDataGrid" HorizontalAlignment="Left" Margin="37,491,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="143" Width="254"/>
-        <TextBox x:Name="searcefor" Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="117,511,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="68"/>
-        <Button x:Name="searchButton" Content="Search" Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="117,566,0,0" VerticalAlignment="Top" Width="51"  Click="SearchHandler"/>
-        <DataGrid x:Name="scoresDataGrid" Grid.Column="1" HorizontalAlignment="Left" Height="126" Margin="518,491,0,0" VerticalAlignment="Top" Width="343"/>
-        <Button x:Name="ResetScores" Content="ClearScores" Grid.Column="1" HorizontalAlignment="Left" Margin="665,641,0,0" VerticalAlignment="Top" Width="75" Click="ResetScores_Click"/>
+        <DataGrid x:Name="RallydataGrid" HorizontalAlignment="Left" Height="47" Margin="10,24,0,0" VerticalAlignment="Top" Width="851" Grid.Column="1"/>
 
-
+        <DataGrid x:Name="CompetitordataGrid" HorizontalAlignment="Left" Margin="10,236.5,0,0" VerticalAlignment="Top" Height="159" Width="506" Grid.Column="1" Grid.Row="1"/>
+        <DataGrid x:Name="CheckpointdataGrid" HorizontalAlignment="Right" Height="140" Margin="0,414.5,321,0" VerticalAlignment="Top" Width="133" Grid.Column="1" Grid.Row="1"/>
+        <DataGrid x:Name="StagedataGrid" HorizontalAlignment="Left" Height="140" Margin="10,414.5,0,0" VerticalAlignment="Top" Width="363" Grid.Column="1" Grid.Row="1"/>
+        <DataGrid x:Name="TimingdataGrid" HorizontalAlignment="Left" Margin="516,237.5,0,0" VerticalAlignment="Top" Height="158" Width="345" Grid.Column="1" Grid.Row="1"/>
+        <ListBox x:Name="SearchlistBox" HorizontalAlignment="Left" Height="154" Margin="10,24,0,0" VerticalAlignment="Top" Width="200" Grid.RowSpan="2"/>
+        <FlowDocumentReader Name="docReader" Margin="56,10,53,449" ScrollViewer.HorizontalScrollBarVisibility="Visible" ViewingMode="Scroll" Background="Aqua" >
+            <FlowDocument Name="outPutDocument" >
+                <Paragraph></Paragraph>
+            </FlowDocument>
+        </FlowDocumentReader>
+        
+        <Button x:Name="setupfilebutton" Content="Setup File" HorizontalAlignment="Left" Margin="10,106.5,0,0" VerticalAlignment="Top" Width="75" Click="setupfilebutton_Click" Height="20" Grid.Row="1"/>
+        <Button x:Name="readButton" Content="Display Data" HorizontalAlignment="Left" Margin="25,562.5,0,0" VerticalAlignment="Top" Width="110" Click="readButton_Click" Grid.Column="1" Height="20" Grid.Row="1"/>
+        <Button x:Name="timeFileButton" Content="Timing File" HorizontalAlignment="Left" Margin="113,106.5,0,0" VerticalAlignment="Top" Width="75" Click="timeFileButton_Click" Height="20" Grid.Row="1"/>
+        <Label x:Name="label" Content="Competitor" HorizontalAlignment="Left" Margin="10,205.5,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="70" Grid.Row="1"/>
+        <Label x:Name="label1" Content="Checkpoint" HorizontalAlignment="Left" Margin="462,395.5,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="70" Grid.Row="1"/>
+        <Label x:Name="label2" Content="Stages" HorizontalAlignment="Left" Margin="0,396.5,0,0" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="-0.375,5.923" Height="26" Width="40" Grid.Row="1"/>
+        <Label x:Name="label3" Content="Timing" HorizontalAlignment="Left" Margin="527,211.5,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="46" Grid.Row="1"/>
+        <Button x:Name="restButton" Content="Reset" HorizontalAlignment="Left" Margin="688,562.5,0,0" VerticalAlignment="Top" Width="74" Click="restButton_Click" Grid.Column="1" Height="20" Grid.Row="1"/>
+        <Button x:Name="editStageButton" Content="~Link~" HorizontalAlignment="Left" Margin="378,491.5,0,0" VerticalAlignment="Top" Width="38" RenderTransformOrigin="0.24,0.4" Click="editStageButton_Click" Grid.Column="1" Height="28" Grid.Row="1"/>
+        <Button x:Name="button" Content="Calculate" HorizontalAlignment="Left" Margin="201,562.5,0,0" VerticalAlignment="Top" Width="74" Click="button_Click" Grid.Column="1" Height="20" Grid.Row="1"/>
+        <Button x:Name="btnExit" Content="EXIT" Grid.Column="1" HorizontalAlignment="Left" Margin="786,562.5,0,0" VerticalAlignment="Top" Width="75" Click="btnExit_Click" RenderTransformOrigin="0.493,-0.9" Height="20" Grid.Row="1"/>
+        <DataGrid x:Name="foundDataGrid" HorizontalAlignment="Left" Margin="10,252.5,0,0" VerticalAlignment="Top" Height="143" Width="200" Grid.Row="1"/>
+        <TextBox x:Name="searcefor" HorizontalAlignment="Left" Height="20" Margin="24,414.5,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="68" Grid.Row="1"/>
+        <Button x:Name="searchButton" Content="Search" HorizontalAlignment="Left" Height="20" Margin="113,414.5,0,0" VerticalAlignment="Top" Width="51"  Click="SearchHandler" Grid.Row="1"/>
+        <DataGrid x:Name="scoresDataGrid" Grid.Column="1" HorizontalAlignment="Left" Height="140" Margin="560,414.5,0,0" VerticalAlignment="Top" Width="301" Grid.Row="1"/>
+        <Button x:Name="ResetScores" Content="ClearScores" Grid.Column="1" HorizontalAlignment="Left" Margin="491,562.5,0,0" VerticalAlignment="Top" Width="75" Click="ResetScores_Click" Grid.Row="1"/>
 
     </Grid>
+
 </Window>

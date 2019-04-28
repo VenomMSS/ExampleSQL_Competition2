@@ -361,6 +361,22 @@ namespace ExampleSQL_Competition2
             SQL_cmd.ExecuteNonQuery();
         }
 
+        private void Show_Click(object sender, RoutedEventArgs e)
+        {
+            // This shows scores in OutputDocument
+            Paragraph para = new Paragraph();
+            para.Inlines.Add("This is added to the document" + '\n');
+            para.Inlines.Add("This is also added to the document" + '\n'+'\r');
+            outPutDocument.Blocks.Add(para);
+            
+        }
+
+        private void Print_btn_Click(object sender, RoutedEventArgs e)
+        {
+            // prints the contnet of the FlowDocument control.
+            docReader.Print();
+        }
+
         private void editStageButton_Click(object sender, RoutedEventArgs e)
         {
             // This method links a stage to the start and end checkpoints for the stage

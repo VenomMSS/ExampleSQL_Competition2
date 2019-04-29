@@ -364,11 +364,36 @@ namespace ExampleSQL_Competition2
         private void Show_Click(object sender, RoutedEventArgs e)
         {
             // This shows scores in OutputDocument
-            Paragraph para = new Paragraph();
-            para.Inlines.Add("This is added to the document" + '\n');
-            para.Inlines.Add("This is also added to the document" + '\n'+'\r');
-            outPutDocument.Blocks.Add(para);
             
+            String outputString;
+            DataRow[] rows = dt_scores.Select();
+            DataRow row;
+            int CompFK, StageFK;
+            // ds_rally dataset contains data on the rally
+            outputString = ds_rally.Tables[0].Rows[0][1].ToString() + "  "+ ds_rally.Tables[0].Rows[0][2].ToString();
+            
+            Paragraph para = new Paragraph();
+           
+            para.Inlines.Add(outputString + '\n' + '\r');
+
+            outPutDocument.Blocks.Add(para);
+
+
+            para = new Paragraph();
+            outputString = "All Scores";
+            para.Inlines.Add(outputString + '\n' + '\r');
+            
+            outPutDocument.Blocks.Add(para);
+            // dataTable dt_scores contains the scores
+            // ned to do following for each row 
+            row = rows[0];
+            outputString = row[1].ToString() + "  " + row[2].ToString() + "  " + row[3].ToString() + "  " + row[4].ToString() + "  ";
+            CompFK = Int32.Parse(row[1].ToString());
+            StageFK = Int32.Parse(row[2].ToString());
+            outputString = "Comp# " + CompFK+ " Stage# " + StageFK +"  " + row[3].ToString() + "  " + row[4].ToString() + "  ";
+            para.Inlines.Add(outputString + '\n' + '\r');
+
+            outPutDocument.Blocks.Add(para);
         }
 
         private void Print_btn_Click(object sender, RoutedEventArgs e)
@@ -678,6 +703,7 @@ namespace ExampleSQL_Competition2
         private void loadfromDB()
         {
                // display all the entries in each table
+               // called by the readbutton_click method ( button labeled "display"
                 String comString;
                 SQLiteCommand sqlCmd;
                            
@@ -728,9 +754,9 @@ namespace ExampleSQL_Competition2
                 TimingdataGrid.ItemsSource = ds_timings.CreateDataReader();
 
             // rally
-                SearchlistBox.Items.Add("time_allowed " + time_allowed);
-                SearchlistBox.Items.Add("out of time penalty " + out_of_time_penalty);
-                SearchlistBox.Items.Add("missed penalty " + miss_penalty);
+                // SearchlistBox.Items.Add("time_allowed " + time_allowed);
+                // SearchlistBox.Items.Add("out of time penalty " + out_of_time_penalty);
+                // SearchlistBox.Items.Add("missed penalty " + miss_penalty);
                 sqlCmd = dataBase.CreateCommand();
                 comString = "SELECT * FROM " + table_rally;
                 sqlCmd.CommandText = comString;
@@ -761,6 +787,7 @@ namespace ExampleSQL_Competition2
 
         private void readButton_Click(object sender, RoutedEventArgs e)
         {
+            // this is the method called when the button labelled"Display" is clicked
             loadfromDB();
         }
 

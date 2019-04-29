@@ -134,7 +134,8 @@ namespace ExampleSQL_Competition2
             string fullpathname = OFileDialog.FileName;
             FileInfo scr = new FileInfo(fullpathname);
             //
-            FilelistBox.Items.Clear();
+            // FilelistBox.Items.Clear();
+            SearchlistBox.Items.Clear();
             TextReader reader = scr.OpenText();
             string line = reader.ReadLine();
             if (line != null)
@@ -143,7 +144,8 @@ namespace ExampleSQL_Competition2
 
                 while (line != null)
                 {
-                    FilelistBox.Items.Add(line);
+                    // FilelistBox.Items.Add(line);
+                    SearchlistBox.Items.Add(line);
                     String[] field = line.Split(',');
                     // saveName adds name(actually competition number) to Competitor table if new
                     name_id = saveName(field[2], field[1], field[5], field[6]); // name_id return as compID from table
@@ -359,6 +361,22 @@ namespace ExampleSQL_Competition2
             SQL_cmd.ExecuteNonQuery();
         }
 
+        private void Show_Click(object sender, RoutedEventArgs e)
+        {
+            // This shows scores in OutputDocument
+            Paragraph para = new Paragraph();
+            para.Inlines.Add("This is added to the document" + '\n');
+            para.Inlines.Add("This is also added to the document" + '\n'+'\r');
+            outPutDocument.Blocks.Add(para);
+            
+        }
+
+        private void Print_btn_Click(object sender, RoutedEventArgs e)
+        {
+            // prints the contnet of the FlowDocument control.
+            docReader.Print();
+        }
+
         private void editStageButton_Click(object sender, RoutedEventArgs e)
         {
             // This method links a stage to the start and end checkpoints for the stage
@@ -407,8 +425,8 @@ namespace ExampleSQL_Competition2
                 {
                     // success// save returned data
                     string[] CPs = editdlg.Answer.Split(',');
-                    beginlabel.Content = CPs[0];
-                    finishlabel.Content = CPs[1];
+                    // beginlabel.Content = CPs[0];
+                    // finishlabel.Content = CPs[1];
                     DataRow row = rows[stindex];
                     row[7] = 1;
                     row[8] = 2;
@@ -450,7 +468,7 @@ namespace ExampleSQL_Competition2
                         "' , Totaltime = '" + expected + "' WHERE StageName  = '" + row[1] + "'";
                     sqlCmd.CommandText = comString;
                     record = sqlCmd.ExecuteNonQuery();
-                    SearchlistBox.Items.Add("Updated stage records " + record);
+                    SearchlistBox.Items.Add("Updated stage records " + row[1]);
                 }
 
             }
@@ -571,8 +589,9 @@ namespace ExampleSQL_Competition2
             int recordnumber, pointss;
             int competitornumber;
             int Nocompetitors = rows.Length;
-            // for each competitor
             SearchlistBox.Items.Clear();
+
+            // for each competitor
             for (int c = 0; c < Nocompetitors; c++)
             //for (int c = 0; c < 1; c++)
             {
@@ -751,20 +770,23 @@ namespace ExampleSQL_Competition2
             string fullpathname = OFileDialog.FileName;
             FileInfo scr = new FileInfo(fullpathname);
             //
-            FilelistBox.Items.Clear();
+            // FilelistBox.Items.Clear();
+            SearchlistBox.Items.Clear();
             TextReader reader = scr.OpenText();
             // read first line with rally name etc
             string line = reader.ReadLine();
             if (line != null )
             {
                 addrallydetails(line);
-                FilelistBox.Items.Add(line);
+                // FilelistBox.Items.Add(line);
+                SearchlistBox.Items.Add(line);
 
                 // get next lines. These are stage details
                 line = reader.ReadLine();
                 while (line != null)
                 {
-                    FilelistBox.Items.Add(line);
+                    //FilelistBox.Items.Add(line);
+                    SearchlistBox.Items.Add(line);
                     addstagedetails(line);
                     line = reader.ReadLine();
                 }

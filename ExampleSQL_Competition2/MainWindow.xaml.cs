@@ -500,7 +500,7 @@ namespace ExampleSQL_Competition2
             para.Inlines.Add(boldtext);
             // add heading paragraph to document 
             outPutDocument.Blocks.Add(para);
-
+            
             
 
             foreach(DataRow comp_row in compets)
@@ -551,8 +551,11 @@ namespace ExampleSQL_Competition2
             DataRow[] scores_rows = dt_scores.Select();
             DataRow[] compets = ds_competitors.Tables[0].Select();
             DataRow[] foundrows;
-            DataRow score_row, comp_row, found_row;
+            DataRow score_row,  found_row;
             int CompFK, StageFK;
+            String comString, compindex;
+            SQLiteCommand sqlCmd;
+
             Bold boldtext = new Bold();
             outPutDocument.Blocks.Clear();
             Paragraph para = new Paragraph();
@@ -560,14 +563,45 @@ namespace ExampleSQL_Competition2
             // ds_rally dataset contains data on the rally 
             outputString = ds_rally.Tables[0].Rows[0][1].ToString() + "  " + ds_rally.Tables[0].Rows[0][2].ToString();
             boldtext.Inlines.Add(outputString + '\n');
-           
-
-            para.Inlines.Add(boldtext);
+           para.Inlines.Add(boldtext);
             outputString = "All Scores";
             boldtext.Inlines.Add(outputString + '\n' + '\r');
             para.Inlines.Add(boldtext);
             // add heading paragraph to document 
             outPutDocument.Blocks.Add(para);
+
+            para = new Paragraph();
+            para.FontSize = 14;
+            foreach (DataRow comp_row in compets)
+            {
+                // write the competition nunber, name etc of this competitor.
+                outputString = "Comp# " + comp_row[1].ToString() + "  Name " + comp_row[2].ToString() +
+                    "  Machine " + comp_row[3].ToString() + "  Machine " + comp_row[4].ToString();
+                boldtext.Inlines.Add(outputString + '\n' + '\r');
+                compindex = comp_row[0].ToString();
+                
+                // now get scores
+                sqlCmd = dataBase.CreateCommand();
+                comString = "SELECT * FROM " + table_scores + " WHERE " + field_competitor + " = " + compindex + ";";
+                sqlCmd.CommandText = comString;
+
+                // execute the sqlcommand to return a datagrid
+                foundAdapter = new SQLiteDataAdapter(sqlCmd);
+                DataSet foundDataset = new DataSet();
+                foundAdapter.Fill(foundDataset, "Found Table");
+                foundDataGrid.ItemsSource = foundDataset.CreateDataReader();
+                // this should populate data found into the founddatagrid
+                foundrows = foundDataset.Tables[0].Select();
+                
+                foreach (DataRow r in foundrows)
+                {
+                    outputString = "Stage# " + r[2].ToString() + "; time taken " + r[3].ToString() + " mins. Penalty Points=  " + r[4].ToString() + '\n';
+                    para.Inlines.Add(outputString + '\r');
+                    // outPutDocument.Blocks.Add(para);
+                }
+                outPutDocument.Blocks.Add(para);
+
+            }
 
         }
 

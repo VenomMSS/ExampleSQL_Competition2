@@ -733,7 +733,12 @@ namespace ExampleSQL_Competition2
 
                 // build command and string
                 sqlCmd = dataBase.CreateCommand();
-                comString = "SELECT Location, timed FROM " + table_scores + " JOINS " + table_timing + " USING " + field_competitor + ";";
+                comString = "SELECT * FROM " + table_scores + " JOIN " + table_timing + ";";
+                outPutDocument.Blocks.Clear();
+                Paragraph para = new Paragraph();
+                para.Inlines.Add(comString +'\n');
+                outPutDocument.Blocks.Add(para);
+
                 sqlCmd.CommandText = comString;
 
                 // execute the sqlcommand to return a datagrid
@@ -742,6 +747,7 @@ namespace ExampleSQL_Competition2
                 foundAdapter.Fill(foundDataset, "My Table");
                 foundDataGrid.ItemsSource = foundDataset.CreateDataReader();
                 // this should populate data found into the founddatagrid
+
             }
         }
     

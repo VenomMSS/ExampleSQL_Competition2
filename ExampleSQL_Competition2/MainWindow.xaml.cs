@@ -733,7 +733,14 @@ namespace ExampleSQL_Competition2
 
                 // build command and string
                 sqlCmd = dataBase.CreateCommand();
-                comString = "SELECT * FROM " + table_scores + " JOIN " + table_timing + ";";
+
+                // comString = "SELECT * FROM " + table_scores + " JOIN " + table_timing + ";";
+                // comString = "SELECT * FROM " + table_scores + " JOIN " + table_timing + " WHERE " + table_scores + "."+ 
+                //     field_competitor + " = " + findString + ";";
+                comString = "SELECT " + table_scores + "." + field_competitor +", "+ field_stage +", "  + field_chckptFK +", "
+                    + field_time +", " + field_timetaken+ ", " +field_score + " FROM " + table_scores + " JOIN " + table_timing 
+                    + " WHERE " + table_scores + "." +  field_competitor + " = " + findString 
+                    + " ORDER BY " + table_scores + "." + field_competitor + ", " + field_stage + ";";
                 outPutDocument.Blocks.Clear();
                 Paragraph para = new Paragraph();
                 para.Inlines.Add(comString +'\n');

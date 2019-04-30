@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ExampleSQL_Competition2"
         mc:Ignorable="d"
         Title="TimingApp" Height="700.901" Width="1117.824"
-        WindowStartupLocation="CenterScreen" Background="Cornsilk"  >
+        WindowStartupLocation="CenterScreen"   >
     <Grid Margin="10,0,0,1">
         <Grid.RowDefinitions>
             <RowDefinition Height="77*"/>
@@ -41,13 +41,19 @@
         <Button x:Name="editStageButton" Content="~Link~" HorizontalAlignment="Left" Margin="378,302.5,0,0" VerticalAlignment="Top" Width="38" RenderTransformOrigin="0.24,0.4" Click="editStageButton_Click" Grid.Column="1" Height="28" Grid.Row="2"/>
         <Button x:Name="button" Content="Calculate" HorizontalAlignment="Left" Margin="201,374.5,0,0" VerticalAlignment="Top" Width="74" Click="button_Click" Grid.Column="1" Height="20" Grid.Row="2"/>
         <Button x:Name="btnExit" Content="EXIT" Grid.Column="1" HorizontalAlignment="Left" Margin="786,374.5,0,0" VerticalAlignment="Top" Width="75" Click="btnExit_Click" RenderTransformOrigin="0.493,-0.9" Height="20" Grid.Row="2"/>
-        <DataGrid x:Name="foundDataGrid" HorizontalAlignment="Left" Margin="10,64.5,0,0" VerticalAlignment="Top" Height="142" Width="200" Grid.Row="2"/>
+        <DataGrid x:Name="foundDataGrid" HorizontalAlignment="Left" Margin="0,48,0,0" VerticalAlignment="Top" Height="158" Width="200" Grid.Row="2"/>
         <TextBox x:Name="searcefor" HorizontalAlignment="Left" Height="20" Margin="24,226.5,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="68" Grid.Row="2"/>
-        <Button x:Name="searchButton" Content="Search" HorizontalAlignment="Left" Height="20" Margin="113,226.5,0,0" VerticalAlignment="Top" Width="51"  Click="SearchHandler" Grid.Row="2"/>
+        <Button x:Name="searchButton" Content="SearchTimes" HorizontalAlignment="Left" Height="20" Margin="113,226,0,0" VerticalAlignment="Top" Width="75"  Click="SearchHandler" Grid.Row="2"/>
         <DataGrid x:Name="scoresDataGrid" Grid.Column="1" HorizontalAlignment="Left" Height="140" Margin="560,226.5,0,0" VerticalAlignment="Top" Width="301" Grid.Row="2"/>
         <Button x:Name="ResetScores" Content="ClearScores" Grid.Column="1" HorizontalAlignment="Left" Margin="491,374.5,0,0" VerticalAlignment="Top" Width="75" Click="ResetScores_Click" Grid.Row="2"/>
         <Button x:Name="Show_btn" Content="Show" HorizontalAlignment="Left" Margin="24,181,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="Show_Click" Grid.RowSpan="2"/>
         <Button x:Name="Print_btn" Content="Print" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="113,181,0,0" Grid.Row="1" Click="Print_btn_Click" Grid.RowSpan="2"/>
+        <Button x:Name="Show_Times" Content="Times" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Grid.Column="1" Margin="99,8,0,0" Grid.Row="2" Click="Show_Times_Click"/>
+        <Button x:Name="Show_Scores" Content="Scores" Grid.Column="1" HorizontalAlignment="Left" Margin="250,8,0,0" Grid.Row="2" VerticalAlignment="Top" Width="76" Click="Show_Scores_Click"/>
+        <Button x:Name="Show_Results" Content="Results" Grid.Column="1" HorizontalAlignment="Left" Margin="378,10,0,0" Grid.Row="2" VerticalAlignment="Top" Width="75" Click="Show_Results_Click"/>
+        <Button x:Name="Search_Scores" Content="Scores" HorizontalAlignment="Left" Margin="112,264,0,0" Grid.Row="2" VerticalAlignment="Top" Width="76" Click="Search_Scores_Click"/>
+        <Button x:Name="JoinTables" Content="Joins" Grid.Column="1" HorizontalAlignment="Left" Margin="724,10,0,0" Grid.Row="2" VerticalAlignment="Top" Width="75" Click="JoinTables_Click"/>
+        <Button x:Name="Search_both" Content="Both" HorizontalAlignment="Left" Margin="114,306,0,0" Grid.Row="2" VerticalAlignment="Top" Width="74" Click="Search_both_Click" IsEnabled="False"/>
 
     </Grid>
 

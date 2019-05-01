@@ -615,7 +615,70 @@ namespace ExampleSQL_Competition2
        
         private void JoinTables_Click(object sender, RoutedEventArgs e)
         {
-            // This uses a select on joined tabless to return exaclt what is needed for result
+            // This uses a select on joined competitor and score tables to return exaclt what is needed for result
+            DataRow[] joinedData;
+            String comString;
+            SQLiteCommand sqlCmd;
+            String findString = searcefor.Text;
+            Bold boldtext;
+            // assume database is open
+
+            // build command and string
+            sqlCmd = dataBase.CreateCommand();
+            // comString = "SELECT * FROM " + table_scores + " JOIN " + table_timing + ";";
+            // comString = "SELECT * FROM " + table_scores + " JOIN " + table_timing + " WHERE " + table_scores + "."+ 
+            //     field_competitor + " = " + findString + ";";
+            comString = "SELECT " + field_compNo + ", " + field_CompName + ", " + field_stage + ", " + field_timetaken + ", "
+                +  field_score + " FROM " + table_competitor + " JOIN " + table_scores
+                + " ON " +  field_competitor + " = compID" 
+                + " ORDER BY compID "  + ";";
+
+            outPutDocument.Blocks.Clear();
+            Paragraph para = new Paragraph();
+            para.Inlines.Add(comString + '\n');
+            outPutDocument.Blocks.Add(para);
+
+            sqlCmd.CommandText = comString;
+            // execute the sqlcommand to return a datagrid
+            foundAdapter = new SQLiteDataAdapter(sqlCmd);
+            DataSet foundDataset = new DataSet();
+            foundAdapter.Fill(foundDataset, "My Table");
+            foundDataGrid.ItemsSource = foundDataset.CreateDataReader();
+            // this should populate data found into the founddatagrid
+            // Data correct in FoundDataGrid.
+            // now need to print on OutputDocument
+            joinedData = foundDataset.Tables[0].Select();
+            int comp_number = 0;
+            int total = 0;
+            para = new Paragraph();
+            foreach (DataRow r in joinedData)
+            {
+                if (Int32.Parse(r[0].ToString()) != comp_number)
+                {
+                    if (comp_number > 0)
+                    {
+                        boldtext = new Bold();
+                        boldtext.Inlines.Add("Total points for competitor " + comp_number + " = " + total + '\n' + '\r');
+                        para.Inlines.Add(boldtext);
+                        outPutDocument.Blocks.Add(para);
+                        
+                    }
+                    comp_number = Int32.Parse(r[0].ToString());
+                    para.Inlines.Add("Comp No# " + r[0].ToString() + '\t' + " Stage " + r[2].ToString() +'\t' + " , Time taken " + r[3].ToString() + '\t' + " , Points " + r[4].ToString() + '\n');
+                    outPutDocument.Blocks.Add(para);
+                    total = Int32.Parse(r[4].ToString()); 
+                }
+                else
+                {
+                    total = total + Int32.Parse(r[4].ToString());
+                    para.Inlines.Add("as above " + '\t' + ", Stage " + r[2].ToString() + '\t' + " , Time taken " + r[3].ToString() + '\t' + " , Points " + r[4].ToString() + '\n');
+                    outPutDocument.Blocks.Add(para);
+                }
+                
+            }
+            // better to add this data to a table. to standardise format
+
+
 
         }
 

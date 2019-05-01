@@ -364,17 +364,322 @@ namespace ExampleSQL_Competition2
         private void Show_Click(object sender, RoutedEventArgs e)
         {
             // This shows scores in OutputDocument
-            Paragraph para = new Paragraph();
-            para.Inlines.Add("This is added to the document" + '\n');
-            para.Inlines.Add("This is also added to the document" + '\n'+'\r');
-            outPutDocument.Blocks.Add(para);
             
+            String outputString;
+            DataRow[] scores_rows = dt_scores.Select();
+            DataRow[] compets = ds_competitors.Tables[0].Select();
+            DataRow[] foundrows;
+            DataRow score_row,comp_row, found_row;
+            int CompFK, StageFK;
+            Bold boldtext = new Bold();
+            outPutDocument.Blocks.Clear();
+            // ds_rally dataset contains data on the rally 
+            outputString = ds_rally.Tables[0].Rows[0][1].ToString() + "  "+ ds_rally.Tables[0].Rows[0][2].ToString();
+            boldtext.Inlines.Add(outputString +'\n');
+            Paragraph para = new Paragraph();
+            para.FontSize = 20;
+           
+            para.Inlines.Add(boldtext);
+            outputString = "All Scores";
+            boldtext.Inlines.Add(outputString +'\n'+'\r');
+            para.Inlines.Add(boldtext);
+            
+            // add heading paragraph to document 
+            outPutDocument.Blocks.Add(para);
+
+
+           //  para = new Paragraph();
+           //  para.FontSize = 12;
+            // dataTable dt_scores contains the scores These are in rows
+            // ned to do following for each row 
+            score_row = scores_rows[0];
+            CompFK = Int32.Parse(score_row[1].ToString());
+            StageFK = Int32.Parse(score_row[2].ToString());
+            outputString = "Comp# " + CompFK+ " Stage# " + StageFK +"  " + score_row[3].ToString() +
+                "  " + score_row[4].ToString() + "  ";
+            // para.Inlines.Add(outputString + '\n' + '\r');
+
+            // outPutDocument.Blocks.Add(para);
+
+
+            // or consider starting from each entry in ds_competitors
+            para = new Paragraph();
+            para.FontSize = 14;
+            
+            comp_row = compets[0];
+            outputString = "Comp # "+ comp_row[1].ToString() + "  " + comp_row[2].ToString() + "  " + comp_row[3].ToString() +
+                "  " + comp_row[4].ToString() + "  ";
+            boldtext.Inlines.Add(outputString + '\n' + '\r');
+            para.Inlines.Add(boldtext);
+            outPutDocument.Blocks.Add(para);
+            // get the index of this entry
+            String compindex = comp_row[0].ToString();
+            // para.Inlines.Add("index of entry " + compindex + '\n' + '\r');
+            // outPutDocument.Blocks.Add(para);
+            // look for comindex in scores
+            //below code from  the search button code
+            String comString;
+            SQLiteCommand sqlCmd;
+            // String findString = searcefor.Text;
+            
+            // build command and string
+            sqlCmd = dataBase.CreateCommand();
+            comString = "SELECT * FROM " + table_timing + " WHERE " + field_compFK + " = " + compindex + ";";
+            sqlCmd.CommandText = comString;
+
+            // execute the sqlcommand to return a datagrid
+            foundAdapter = new SQLiteDataAdapter(sqlCmd);
+            DataSet foundDataset = new DataSet();
+            foundAdapter.Fill(foundDataset, "Found Table");
+            foundDataGrid.ItemsSource = foundDataset.CreateDataReader();
+            // this should populate data found into the founddatagrid
+            foundrows = foundDataset.Tables[0].Select();
+            // outputString = "No of records found = " + foundrows.Length + '\n';
+            // para.Inlines.Add(outputString + '\n' + '\r');
+            outPutDocument.Blocks.Add(para);
+            // this gives us the actiual timing event
+            foreach (DataRow r in foundrows)
+            {
+                outputString = r[0].ToString() + "  " + r[1].ToString() + "  " + r[2].ToString() + "  " +
+                    r[3].ToString() + "  " + r[4].ToString() + '\n';
+                para.Inlines.Add(outputString + '\r');
+                outPutDocument.Blocks.Add(para);
+            }
+            // we also need to do same for scores
+            para = new Paragraph();
+            sqlCmd = dataBase.CreateCommand();
+            comString = "SELECT * FROM " + table_scores + " WHERE " + field_competitor + " = " + compindex + ";";
+            sqlCmd.CommandText = comString;
+            // execute the sqlcommand to return a datagrid
+            foundAdapter = new SQLiteDataAdapter(sqlCmd);
+            foundDataset = new DataSet();
+            foundAdapter.Fill(foundDataset, "Found Table");
+            // this might cause problems without clearing data from founddatagrid
+            foundDataGrid.ItemsSource = foundDataset.CreateDataReader();
+            // this should populate data found into the founddatagrid
+
+            foundrows = foundDataset.Tables[0].Select();
+            outputString = "No of records found = " + foundrows.Length + '\n';
+            para.Inlines.Add(outputString + '\n' + '\r');
+            outPutDocument.Blocks.Add(para);
+            foreach (DataRow r in foundrows)
+            {
+                outputString = r[0].ToString() + "  " + r[1].ToString() + "  " + r[2].ToString() + "  " +
+                    r[3].ToString() + "  "  + '\n';
+                para.Inlines.Add(outputString + '\r');
+                outPutDocument.Blocks.Add(para);
+            }
         }
 
         private void Print_btn_Click(object sender, RoutedEventArgs e)
         {
             // prints the contnet of the FlowDocument control.
             docReader.Print();
+        }
+
+        private void Show_Times_Click(object sender, RoutedEventArgs e)
+        {
+            String outputString;
+            DataRow[] scores_rows = dt_scores.Select();
+            DataRow[] compets = ds_competitors.Tables[0].Select();
+            DataRow[] foundrows;
+            DataRow score_row,  found_row;
+            int CompFK, StageFK;
+
+            Bold boldtext = new Bold();
+            outPutDocument.Blocks.Clear();
+            Paragraph para = new Paragraph();
+            para.FontSize = 20;
+            // ds_rally dataset contains data on the rally 
+            outputString = ds_rally.Tables[0].Rows[0][1].ToString() + "  " + ds_rally.Tables[0].Rows[0][2].ToString();
+
+            boldtext.Inlines.Add(outputString + '\n');
+            para.Inlines.Add(boldtext);
+            outputString = "All Times";
+            boldtext.Inlines.Add(outputString + '\n' + '\r');
+            para.Inlines.Add(boldtext);
+            // add heading paragraph to document 
+            outPutDocument.Blocks.Add(para);
+            
+            
+
+            foreach(DataRow comp_row in compets)
+            {
+                para = new Paragraph();
+                para.FontSize = 14;
+                outputString = "Comp # " + comp_row[1].ToString() + "  " + comp_row[2].ToString() + "  " + comp_row[3].ToString() +
+                "  " + comp_row[4].ToString() + "  ";
+            boldtext.Inlines.Add(outputString + '\n' + '\r');
+            para.Inlines.Add(boldtext);
+            // outPutDocument.Blocks.Add(para);
+            // get the index of this entry
+            String compindex = comp_row[0].ToString();
+            
+            String comString;
+            SQLiteCommand sqlCmd;
+            // String findString = searcefor.Text;
+
+            // build command and string
+            sqlCmd = dataBase.CreateCommand();
+            comString = "SELECT * FROM " + table_timing + " WHERE " + field_compFK + " = " + compindex + ";";
+            sqlCmd.CommandText = comString;
+
+            // execute the sqlcommand to return a datagrid
+            foundAdapter = new SQLiteDataAdapter(sqlCmd);
+            DataSet foundDataset = new DataSet();
+            foundAdapter.Fill(foundDataset, "Found Table");
+            foundDataGrid.ItemsSource = foundDataset.CreateDataReader();
+            // this should populate data found into the founddatagrid
+            foundrows = foundDataset.Tables[0].Select();
+            // outputString = "No of records found = " + foundrows.Length + '\n';
+            // para.Inlines.Add(outputString + '\n' + '\r');
+            // outPutDocument.Blocks.Add(para);
+            // this gives us the actiual timing event
+            foreach (DataRow r in foundrows)
+            {
+                outputString = "Checkpoint # " + r[2].ToString() + " timed @ " + r[3].ToString() + " by " + r[4].ToString()  + '\n';
+                para.Inlines.Add(outputString + '\r');
+                // outPutDocument.Blocks.Add(para);
+            }
+                outPutDocument.Blocks.Add(para);
+            }
+        }
+
+        private void Show_Scores_Click(object sender, RoutedEventArgs e)
+        {
+            String outputString;
+            DataRow[] scores_rows = dt_scores.Select();
+            DataRow[] compets = ds_competitors.Tables[0].Select();
+            DataRow[] foundrows;
+            DataRow score_row,  found_row;
+            int CompFK, StageFK;
+            String comString, compindex;
+            SQLiteCommand sqlCmd;
+
+            Bold boldtext = new Bold();
+            outPutDocument.Blocks.Clear();
+            Paragraph para = new Paragraph();
+            para.FontSize = 20;
+            // ds_rally dataset contains data on the rally 
+            outputString = ds_rally.Tables[0].Rows[0][1].ToString() + "  " + ds_rally.Tables[0].Rows[0][2].ToString();
+            boldtext.Inlines.Add(outputString + '\n');
+           para.Inlines.Add(boldtext);
+            outputString = "All Scores";
+            boldtext.Inlines.Add(outputString + '\n' + '\r');
+            para.Inlines.Add(boldtext);
+            // add heading paragraph to document 
+            outPutDocument.Blocks.Add(para);
+
+            para = new Paragraph();
+            para.FontSize = 14;
+            foreach (DataRow comp_row in compets)
+            {
+                // write the competition nunber, name etc of this competitor.
+                outputString = "Comp# " + comp_row[1].ToString() + "  Name " + comp_row[2].ToString() +
+                    "  Machine " + comp_row[3].ToString() + "  Machine " + comp_row[4].ToString();
+                boldtext.Inlines.Add(outputString + '\n' + '\r');
+                compindex = comp_row[0].ToString();
+                
+                // now get scores
+                sqlCmd = dataBase.CreateCommand();
+                comString = "SELECT * FROM " + table_scores + " WHERE " + field_competitor + " = " + compindex + ";";
+                sqlCmd.CommandText = comString;
+
+                // execute the sqlcommand to return a datagrid
+                foundAdapter = new SQLiteDataAdapter(sqlCmd);
+                DataSet foundDataset = new DataSet();
+                foundAdapter.Fill(foundDataset, "Found Table");
+                foundDataGrid.ItemsSource = foundDataset.CreateDataReader();
+                // this should populate data found into the founddatagrid
+                foundrows = foundDataset.Tables[0].Select();
+                
+                foreach (DataRow r in foundrows)
+                {
+                    outputString = "Stage# " + r[2].ToString() + "; time taken " + r[3].ToString() + " mins. Penalty Points=  " + r[4].ToString() + '\n';
+                    para.Inlines.Add(outputString + '\r');
+                    // outPutDocument.Blocks.Add(para);
+                }
+                outPutDocument.Blocks.Add(para);
+
+            }
+
+        }
+
+        private void Show_Results_Click(object sender, RoutedEventArgs e)
+        {
+            // this is used to order the competitors by score 
+            // not too sure how to do this
+
+        }
+
+       
+        private void JoinTables_Click(object sender, RoutedEventArgs e)
+        {
+            // This uses a select on joined competitor and score tables to return exaclt what is needed for result
+            DataRow[] joinedData;
+            String comString;
+            SQLiteCommand sqlCmd;
+            String findString = searcefor.Text;
+            Bold boldtext;
+            // assume database is open
+
+            // build command and string
+            sqlCmd = dataBase.CreateCommand();
+            // comString = "SELECT * FROM " + table_scores + " JOIN " + table_timing + ";";
+            // comString = "SELECT * FROM " + table_scores + " JOIN " + table_timing + " WHERE " + table_scores + "."+ 
+            //     field_competitor + " = " + findString + ";";
+            comString = "SELECT " + field_compNo + ", " + field_CompName + ", " + field_stage + ", " + field_timetaken + ", "
+                +  field_score + " FROM " + table_competitor + " JOIN " + table_scores
+                + " ON " +  field_competitor + " = compID" 
+                + " ORDER BY compID "  + ";";
+
+            outPutDocument.Blocks.Clear();
+            Paragraph para = new Paragraph();
+            para.Inlines.Add(comString + '\n');
+            outPutDocument.Blocks.Add(para);
+
+            sqlCmd.CommandText = comString;
+            // execute the sqlcommand to return a datagrid
+            foundAdapter = new SQLiteDataAdapter(sqlCmd);
+            DataSet foundDataset = new DataSet();
+            foundAdapter.Fill(foundDataset, "My Table");
+            foundDataGrid.ItemsSource = foundDataset.CreateDataReader();
+            // this should populate data found into the founddatagrid
+            // Data correct in FoundDataGrid.
+            // now need to print on OutputDocument
+            joinedData = foundDataset.Tables[0].Select();
+            int comp_number = 0;
+            int total = 0;
+            para = new Paragraph();
+            foreach (DataRow r in joinedData)
+            {
+                if (Int32.Parse(r[0].ToString()) != comp_number)
+                {
+                    if (comp_number > 0)
+                    {
+                        boldtext = new Bold();
+                        boldtext.Inlines.Add("Total points for competitor " + comp_number + " = " + total + '\n' + '\r');
+                        para.Inlines.Add(boldtext);
+                        outPutDocument.Blocks.Add(para);
+                        
+                    }
+                    comp_number = Int32.Parse(r[0].ToString());
+                    para.Inlines.Add("Comp No# " + r[0].ToString() + '\t' + " Stage " + r[2].ToString() +'\t' + " , Time taken " + r[3].ToString() + '\t' + " , Points " + r[4].ToString() + '\n');
+                    outPutDocument.Blocks.Add(para);
+                    total = Int32.Parse(r[4].ToString()); 
+                }
+                else
+                {
+                    total = total + Int32.Parse(r[4].ToString());
+                    para.Inlines.Add("as above " + '\t' + ", Stage " + r[2].ToString() + '\t' + " , Time taken " + r[3].ToString() + '\t' + " , Points " + r[4].ToString() + '\n');
+                    outPutDocument.Blocks.Add(para);
+                }
+                
+            }
+            // better to add this data to a table. to standardise format
+
+
+
         }
 
         private void editStageButton_Click(object sender, RoutedEventArgs e)
@@ -475,6 +780,76 @@ namespace ExampleSQL_Competition2
 
         }
 
+        private void Search_both_Click(object sender, RoutedEventArgs e)
+        {
+            // called to search both timing and score tables
+            // firstly check if the searchfor text box has an entry
+            if (searcefor.Text != "")
+            {
+                String comString;
+                SQLiteCommand sqlCmd;
+                String findString = searcefor.Text;
+                // assume database is open
+                // the field_compFK links to the row number in the competitors table
+                // if you want to retrieve the competition number then need to search 
+                // for the competitin number on the table_competitors first. (field_compNo)
+
+                // build command and string
+                sqlCmd = dataBase.CreateCommand();
+
+                // comString = "SELECT * FROM " + table_scores + " JOIN " + table_timing + ";";
+                // comString = "SELECT * FROM " + table_scores + " JOIN " + table_timing + " WHERE " + table_scores + "."+ 
+                //     field_competitor + " = " + findString + ";";
+                comString = "SELECT " + table_scores + "." + field_competitor +", "+ field_stage +", "  + field_chckptFK +", "
+                    + field_time +", " + field_timetaken+ ", " +field_score + " FROM " + table_scores + " JOIN " + table_timing 
+                    + " WHERE " + table_scores + "." +  field_competitor + " = " + findString 
+                    + " ORDER BY " + table_scores + "." + field_competitor + ", " + field_stage + ";";
+                outPutDocument.Blocks.Clear();
+                Paragraph para = new Paragraph();
+                para.Inlines.Add(comString +'\n');
+                outPutDocument.Blocks.Add(para);
+
+                sqlCmd.CommandText = comString;
+
+                // execute the sqlcommand to return a datagrid
+                foundAdapter = new SQLiteDataAdapter(sqlCmd);
+                DataSet foundDataset = new DataSet();
+                foundAdapter.Fill(foundDataset, "My Table");
+                foundDataGrid.ItemsSource = foundDataset.CreateDataReader();
+                // this should populate data found into the founddatagrid
+
+            }
+        }
+    
+
+        private void Search_Scores_Click(object sender, RoutedEventArgs e)
+        {
+            // called by Scores button to search for Scores on selected competitor
+            // firstly check if the searchfor text box has an entry
+            if (searcefor.Text != "")
+            {
+                String comString;
+                SQLiteCommand sqlCmd;
+                String findString = searcefor.Text;
+                // assume database is open
+                // the field_compFK links to the row number in the competitors table
+                // if you want to retrieve the competition number then need to search 
+                // for the competitin number on the table_competitors first. (field_compNo)
+
+                // build command and string
+                sqlCmd = dataBase.CreateCommand();
+                comString = "SELECT * FROM " + table_scores + " WHERE " + field_competitor + " = " + findString + ";";
+                sqlCmd.CommandText = comString;
+
+                // execute the sqlcommand to return a datagrid
+                foundAdapter = new SQLiteDataAdapter(sqlCmd);
+                DataSet foundDataset = new DataSet();
+                foundAdapter.Fill(foundDataset, "My Table");
+                foundDataGrid.ItemsSource = foundDataset.CreateDataReader();
+                // this should populate data found into the founddatagrid
+            }
+        }
+
         private void SearchHandler(object sender, RoutedEventArgs e)
         {
             // callered by search button
@@ -502,11 +877,10 @@ namespace ExampleSQL_Competition2
                 foundAdapter.Fill(foundDataset, "My Table");
                 foundDataGrid.ItemsSource = foundDataset.CreateDataReader();
                 // this should populate data found into the founddatagrid
-
-
             }
-
         }
+        
+
 
         private String FindTiming(String Comp_Rec, String CP_Rec)
         {
@@ -678,6 +1052,7 @@ namespace ExampleSQL_Competition2
         private void loadfromDB()
         {
                // display all the entries in each table
+               // called by the readbutton_click method ( button labeled "display"
                 String comString;
                 SQLiteCommand sqlCmd;
                            
@@ -728,9 +1103,9 @@ namespace ExampleSQL_Competition2
                 TimingdataGrid.ItemsSource = ds_timings.CreateDataReader();
 
             // rally
-                SearchlistBox.Items.Add("time_allowed " + time_allowed);
-                SearchlistBox.Items.Add("out of time penalty " + out_of_time_penalty);
-                SearchlistBox.Items.Add("missed penalty " + miss_penalty);
+                // SearchlistBox.Items.Add("time_allowed " + time_allowed);
+                // SearchlistBox.Items.Add("out of time penalty " + out_of_time_penalty);
+                // SearchlistBox.Items.Add("missed penalty " + miss_penalty);
                 sqlCmd = dataBase.CreateCommand();
                 comString = "SELECT * FROM " + table_rally;
                 sqlCmd.CommandText = comString;
@@ -761,6 +1136,7 @@ namespace ExampleSQL_Competition2
 
         private void readButton_Click(object sender, RoutedEventArgs e)
         {
+            // this is the method called when the button labelled"Display" is clicked
             loadfromDB();
         }
 

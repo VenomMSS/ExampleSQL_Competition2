@@ -14,7 +14,7 @@
         <Label x:Name="label" Content="Start CP" HorizontalAlignment="Left" Margin="22,71,0,0" VerticalAlignment="Top"/>
         <Label x:Name="label1" Content="Finish CP" HorizontalAlignment="Left" Margin="22,111,0,0" VerticalAlignment="Top"/>
         <Label x:Name="StageNameLbl" Content="stage" HorizontalAlignment="Left" Margin="22,40,0,0" VerticalAlignment="Top" Width="113"/>
-        <Button x:Name="calcbutton" Content="Calculate" HorizontalAlignment="Left" Margin="257,75,0,0" VerticalAlignment="Top" Width="62"/>
+        <!--<Button x:Name="calcbutton" Content="Calculate" HorizontalAlignment="Left" Margin="257,75,0,0" VerticalAlignment="Top" Width="62"/>-->
 
     </Grid>
 </Window>

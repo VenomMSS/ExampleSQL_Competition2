@@ -95,7 +95,7 @@ namespace ExampleSQL_Competition2
             InitializeComponent();
 
             // version number in connection string  is the SQLite version and needs to be set to 3.
-            connectionString = "Data Source =c:\\Databases\\Rally2019.db;Version=3;New=True;Compress=True;";
+            connectionString = "Data Source =c:\\Databases\\Rally2019a.db;Version=3;New=True;Compress=True;";
             dataBase = new SQLiteConnection(connectionString);
             dataBase.Open();
            
@@ -797,13 +797,13 @@ namespace ExampleSQL_Competition2
                 // build command and string
                 sqlCmd = dataBase.CreateCommand();
 
-                // comString = "SELECT * FROM " + table_scores + " JOIN " + table_timing + ";";
+                comString = "SELECT competitorFK, sum(points) AS total FROM scores JOIN competitors ON  competitors.compID = scores.CompetitorFK GROUP BY competitorFK ORDER BY total, Competitor_Name;";
                 // comString = "SELECT * FROM " + table_scores + " JOIN " + table_timing + " WHERE " + table_scores + "."+ 
                 //     field_competitor + " = " + findString + ";";
-                comString = "SELECT " + table_scores + "." + field_competitor +", "+ field_stage +", "  + field_chckptFK +", "
-                    + field_time +", " + field_timetaken+ ", " +field_score + " FROM " + table_scores + " JOIN " + table_timing 
-                    + " WHERE " + table_scores + "." +  field_competitor + " = " + findString 
-                    + " ORDER BY " + table_scores + "." + field_competitor + ", " + field_stage + ";";
+               // comString = "SELECT " + table_scores + "." + field_competitor +", "+ field_stage +", "  + field_chckptFK +", "
+               //     + field_time +", " + field_timetaken+ ", " +field_score + " FROM " + table_scores + " JOIN " + table_timing 
+                //    + " WHERE " + table_scores + "." +  field_competitor + " = " + findString 
+                //    + " ORDER BY " + table_scores + "." + field_competitor + ", " + field_stage + ";";
                 outPutDocument.Blocks.Clear();
                 Paragraph para = new Paragraph();
                 para.Inlines.Add(comString +'\n');

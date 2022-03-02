@@ -609,6 +609,38 @@ namespace ExampleSQL_Competition2
         {
             // this is used to order the competitors by score 
             // not too sure how to do this
+            DataRow[] joinedData;
+            String comString;
+            SQLiteCommand sqlCmd;
+            String findString = searcefor.Text;
+            Bold boldtext;
+
+            sqlCmd = dataBase.CreateCommand();
+
+            comString = "SELECT compID, compNumber, Competitor_Name, sum(points) AS totalPoints FROM competitors JOIN scores ON competitorFK = compID GROUP BY compNumber ORDER BY totalPoints;";
+            sqlCmd.CommandText = comString;
+
+            outPutDocument.Blocks.Clear();
+            Paragraph para = new Paragraph();
+            para.Inlines.Add("Tesult of Competition "+ '\n');
+            outPutDocument.Blocks.Add(para);
+
+            foundAdapter = new SQLiteDataAdapter(sqlCmd);
+            DataSet foundDataset = new DataSet();
+            foundAdapter.Fill(foundDataset, "My Table");
+            foundDataGrid.ItemsSource = foundDataset.CreateDataReader();
+
+            joinedData = foundDataset.Tables[0].Select();
+            int position = 0;
+            int total = 0;
+            para = new Paragraph();
+            para.Inlines.Add("POSITION  " + '\t' + "Number   " + '\t'  + "Name  " + '\t'  + "  Total Points  "+ '\n');
+            foreach (DataRow r in joinedData)
+            {
+                position++;
+                para.Inlines.Add(" " + position + '\t' + '\t' + " No# " + r[1].ToString() + '\t'  +'\t'+ " " + r[2].ToString() + '\t' +  '\t' +  r[3].ToString() + "Points"  + '\n');
+                outPutDocument.Blocks.Add(para);
+            }
 
         }
 

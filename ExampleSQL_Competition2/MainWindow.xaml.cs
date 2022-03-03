@@ -730,7 +730,7 @@ namespace ExampleSQL_Competition2
                        currentscore = Int32.Parse(r[3].ToString());
                      } else
                     {
-                    jtext = "joint";
+                    jtext = "^joint^";
                     }
 
                 // add jtext to first cell
@@ -767,9 +767,24 @@ namespace ExampleSQL_Competition2
                 rider++;
             }
 
+            // pint explnation at bottom
+            Paragraph finalpara = new Paragraph();
+            para.Margin = new Thickness(24, 24, 0, 0);
+            para.FontSize = 15;
+            finalpara.Inlines.Add("NOTE ^joint^. Joint position. Two or more entrants finished in this position. \n");
+            finalpara.Inlines.Add("  \n");
+            finalpara.Inlines.Add(" " + '\n');
+            finalpara.Inlines.Add("One single penalty point is awarded for each minute the competitor arrives early or late at a Check Point");
+            finalpara.Inlines.Add(" up to a maximum of " + time_allowed + " minutes\n");
+            finalpara.Inlines.Add(" Competitors arriving outside of this " + time_allowed + " minute window receive a late/early penalty of " + out_of_time_penalty + " penalty points\n");
+            finalpara.Inlines.Add(" Competitors missing the Checkpoint receive a missed penalty of " + miss_penalty + " penalty points\n");
+
+            outPutDocument.Blocks.Add(finalpara);
+
+
         }
 
-       
+
         private void JoinTables_Click(object sender, RoutedEventArgs e)
         {
             // This uses a select on joined competitor and score tables to return exaclt what is needed for result

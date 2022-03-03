@@ -614,16 +614,95 @@ namespace ExampleSQL_Competition2
             SQLiteCommand sqlCmd;
             String findString = searcefor.Text;
             Bold boldtext;
+            String EventName, EventDate; ;
+
+            outPutDocument.Blocks.Clear();
+
+            EventName = ds_rally.Tables[0].Rows[0][1].ToString();
+            EventDate = ds_rally.Tables[0].Rows[0][2].ToString();
+            Paragraph para = new Paragraph();
+            para.FontSize = 20;
+            para.Foreground = Brushes.Blue;
+            para.FontWeight = FontWeights.Bold;
+            para.Inlines.Add('\t'+ EventName +  '\n');
+            // outPutDocument.Blocks.Add(para);
+                      
+            // para.Inlines.Add(" "+'\t' + '\t' + " Held on " + EventDate + '\n' + '\n');
+            para.Inlines.Add(" " + '\t' + '\t' + "  Competition Results " + '\n');
+            outPutDocument.Blocks.Add(para);
+
+            // create a Result table 
+            // create integers to keep track of row nuners and rider position
+            int rownumner = 0;
+            int currentscore = -1;
+            int finishposition = 0;
+            int rider = 1;
+
+            Table resulttable = new Table();
+            resulttable.Margin = new Thickness(60, 0, 0, 0);
+            outPutDocument.Blocks.Add(resulttable);
+
+            // add 5 columns
+            resulttable.Columns.Add(new TableColumn());
+            resulttable.Columns[0].Width = new GridLength(50);
+            resulttable.Columns.Add(new TableColumn());
+            resulttable.Columns[1].Width = new GridLength(70);
+            resulttable.Columns.Add(new TableColumn());
+            resulttable.Columns[2].Width = new GridLength(100);
+            resulttable.Columns.Add(new TableColumn());
+            resulttable.Columns[3].Width = new GridLength(250);
+            resulttable.Columns.Add(new TableColumn());
+            resulttable.Columns[4].Width = new GridLength(100);
+
+            // add title row
+            TableRow currentrow;
+            resulttable.RowGroups.Add(new TableRowGroup());
+            resulttable.RowGroups[0].Rows.Add(new TableRow());
+            currentrow = resulttable.RowGroups[0].Rows[rownumner];
+            currentrow.Background = Brushes.WhiteSmoke;
+            currentrow.FontSize = 30;
+            currentrow.FontWeight = FontWeights.Bold;
+            currentrow.Cells.Add(new TableCell(new Paragraph(new Run("RESULTS"))));
+            currentrow.Cells[0].ColumnSpan = 5;
+            currentrow.Cells[0].TextAlignment = TextAlignment.Center;
+
+            // add header row
+            rownumner++;
+            resulttable.RowGroups[0].Rows.Add(new TableRow());
+            currentrow = resulttable.RowGroups[0].Rows[rownumner];
+            currentrow.FontSize = 18;
+            currentrow.FontWeight = FontWeights.Bold;
+            currentrow.Background = Brushes.WhiteSmoke;
+            currentrow.Cells.Add(new TableCell(new Paragraph(new Run("POSITION"))));
+            currentrow.Cells[0].ColumnSpan = 2;
+            currentrow.Cells[0].TextAlignment = TextAlignment.Center;
+            currentrow.Cells.Add(new TableCell(new Paragraph(new Run("CompNo."))));
+            currentrow.Cells.Add(new TableCell(new Paragraph(new Run("NAME"))));
+            currentrow.Cells.Add(new TableCell(new Paragraph(new Run("SCORE"))));
+
+            // add blank row
+            rownumner++;
+            resulttable.RowGroups[0].Rows.Add(new TableRow());
+            currentrow = resulttable.RowGroups[0].Rows[rownumner];
+            currentrow.FontSize = 18;
+            currentrow.FontWeight = FontWeights.Bold;
+            currentrow.Background = Brushes.WhiteSmoke;
+            currentrow.Cells.Add(new TableCell(new Paragraph(new Run("   "))));
+            currentrow.Cells[0].ColumnSpan = 4;
+            currentrow.Cells[0].TextAlignment = TextAlignment.Center;
+
+
 
             sqlCmd = dataBase.CreateCommand();
 
             comString = "SELECT compID, compNumber, Competitor_Name, sum(points) AS totalPoints FROM competitors JOIN scores ON competitorFK = compID GROUP BY compNumber ORDER BY totalPoints;";
             sqlCmd.CommandText = comString;
-
-            outPutDocument.Blocks.Clear();
-            Paragraph para = new Paragraph();
-            para.Inlines.Add("Tesult of Competition "+ '\n');
-            outPutDocument.Blocks.Add(para);
+            
+            
+                       
+           
+            
+           
 
             foundAdapter = new SQLiteDataAdapter(sqlCmd);
             DataSet foundDataset = new DataSet();
@@ -633,13 +712,59 @@ namespace ExampleSQL_Competition2
             joinedData = foundDataset.Tables[0].Select();
             int position = 0;
             int total = 0;
-            para = new Paragraph();
-            para.Inlines.Add("POSITION  " + '\t' + "Number   " + '\t'  + "Name  " + '\t'  + "  Total Points  "+ '\n');
+            string jtext = "unknown";
+            
             foreach (DataRow r in joinedData)
             {
-                position++;
-                para.Inlines.Add(" " + position + '\t' + '\t' + " No# " + r[1].ToString() + '\t'  +'\t'+ " " + r[2].ToString() + '\t' +  '\t' +  r[3].ToString() + "Points"  + '\n');
-                outPutDocument.Blocks.Add(para);
+                                
+                rownumner++;
+                resulttable.RowGroups[0].Rows.Add(new TableRow());
+                currentrow = resulttable.RowGroups[0].Rows[rownumner];
+                currentrow.FontSize = 14;
+
+                // check for joint position
+                if (Int32.Parse(r[3].ToString()) > currentscore)
+                    {
+                       jtext = "";
+                       position = rider;
+                       currentscore = Int32.Parse(r[3].ToString());
+                     } else
+                    {
+                    jtext = "joint";
+                    }
+
+                // add jtext to first cell
+                currentrow.Cells.Add(new TableCell(new Paragraph(new Run(jtext))));
+
+                // check for first three positions
+                if (position < 4)
+                {
+                    currentrow.FontWeight = FontWeights.Bold;
+                    currentrow.Foreground = Brushes.RoyalBlue;
+                }
+                // and add position number
+                switch (position)
+                {
+                    case 1: currentrow.Cells.Add(new TableCell(new Paragraph(new Run("WINNER"))));
+                        break;
+                    case 2: currentrow.Cells.Add(new TableCell(new Paragraph(new Run("SECOND" ))));
+                        break;
+                    case 3: currentrow.Cells.Add(new TableCell(new Paragraph(new Run("THIRD" ))));
+                        break;
+                    default: currentrow.Cells.Add(new TableCell(new Paragraph(new Run(position + "th"))));
+                        break;
+                }
+
+               
+
+                // add competition number
+                currentrow.Cells.Add(new TableCell(new Paragraph(new Run("  " + r[1].ToString() ))));
+                // add name
+                currentrow.Cells.Add(new TableCell(new Paragraph(new Run("  " + r[2].ToString()))));
+                // add score
+                currentrow.Cells.Add(new TableCell(new Paragraph(new Run("  " + r[3].ToString()))));
+
+                rider++;
             }
 
         }

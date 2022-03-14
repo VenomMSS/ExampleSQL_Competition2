@@ -115,6 +115,18 @@ namespace ExampleSQL_Competition2
 
         }
 
+        private void Add_Competitors_Click(object sender, RoutedEventArgs e)
+        {
+            // Called to open Competitor file and add names and machine to database
+            OFileDialog = new OpenFileDialog();
+            OFileDialog.Title = "Open competitor file";
+
+            OFileDialog.FileOk += OFileDialog_FileOk2;
+            OFileDialog.ShowDialog();
+        }
+
+
+
         private void timeFileButton_Click(object sender, RoutedEventArgs e)
         {
             OFileDialog = new OpenFileDialog();
@@ -992,7 +1004,8 @@ namespace ExampleSQL_Competition2
 
             }
         }
-    
+
+       
 
         private void Search_Scores_Click(object sender, RoutedEventArgs e)
         {
@@ -1377,5 +1390,56 @@ namespace ExampleSQL_Competition2
             SQL_cmd.CommandText = commandString;
             SQL_cmd.ExecuteNonQuery();
         }
+
+        private void OFileDialog_FileOk2(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // open competitor file and read names and machines
+            
+            SQLiteCommand SQL_cmd;
+            String commandString;
+            String name_id, loc_id, when;
+            string fullpathname = OFileDialog.FileName;
+            FileInfo scr = new FileInfo(fullpathname);
+            int record =0;
+            
+            SearchlistBox.Items.Clear();
+            TextReader reader = scr.OpenText();
+            // begin reading file from first line
+            string line = reader.ReadLine();
+            if (line != null)
+            {
+                
+                while (line != null)
+                {
+                    
+                    SearchlistBox.Items.Add(line);
+                    String[] field = line.Split(',');
+                    // saveName adds name(actually competition number) to Competitor table if new
+                    
+                    try
+                    {
+                        SQL_cmd = dataBase.CreateCommand();
+                        commandString = "UPDATE competitors SET Competitor_Name = '" + field[1] + "' ,Make_Model = '" + field[2] +  "'  WHERE compNumber  = '" + field[0] + "'";
+                        SQL_cmd.CommandText = commandString;
+                        record = SQL_cmd.ExecuteNonQuery();
+                        SQL_cmd.CommandText = commandString;
+                        SQL_cmd.ExecuteNonQuery();
+                        // this adds FK for comp number and location, and the time to timing table
+                    }
+                    catch (Exception)
+                    {
+                        errorlog = errorlog + line;
+                        SearchlistBox.Items.Add(line + "  "+ record);
+                    }
+                    line = reader.ReadLine();
+                }
+
+            }
+            else
+            {
+                SearchlistBox.Items.Add("This file is empty");
+            }
+        
+    }
     }
 }

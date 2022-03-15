@@ -100,7 +100,7 @@ namespace ExampleSQL_Competition2
             dataBase.Open();
            
             createAllTables();
-            // dataBase.Close();
+            
             errorlog = "";
 
         }

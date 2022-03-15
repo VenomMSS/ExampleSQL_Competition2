@@ -17,13 +17,13 @@
             <ColumnDefinition Width="56*"/>
             <ColumnDefinition Width="219*"/>
         </Grid.ColumnDefinitions>
-        <DataGrid x:Name="RallydataGrid" HorizontalAlignment="Left" Height="47" Margin="10,24,0,0" VerticalAlignment="Top" Width="851" Grid.Column="1"/>
+        <DataGrid x:Name="RallydataGrid" HorizontalAlignment="Left" Height="35" Margin="10,36,0,0" VerticalAlignment="Top" Width="851" Grid.Column="1"/>
 
         <DataGrid x:Name="CompetitordataGrid" HorizontalAlignment="Left" Margin="10,48.5,0,0" VerticalAlignment="Top" Height="158" Width="506" Grid.Column="1" Grid.Row="2" />
         <DataGrid x:Name="CheckpointdataGrid" HorizontalAlignment="Right" Height="140" Margin="0,226.5,321,0" VerticalAlignment="Top" Width="133" Grid.Column="1" Grid.Row="2"/>
         <DataGrid x:Name="StagedataGrid" HorizontalAlignment="Left" Height="140" Margin="10,226.5,0,0" VerticalAlignment="Top" Width="363" Grid.Column="1" Grid.Row="2"/>
         <DataGrid x:Name="TimingdataGrid" HorizontalAlignment="Left" Margin="516,48.5,0,0" VerticalAlignment="Top" Height="158" Width="345" Grid.Column="1" Grid.Row="2"/>
-        <ListBox x:Name="SearchlistBox" HorizontalAlignment="Left" Height="154" Margin="0,10,0,0" VerticalAlignment="Top" Width="200" Grid.RowSpan="2"/>
+        <ListBox x:Name="SearchlistBox" HorizontalAlignment="Left" Height="128" Margin="0,36,0,0" VerticalAlignment="Top" Width="200" Grid.RowSpan="2"/>
         <FlowDocumentReader Name="docReader" Margin="25,25,28,10" ScrollViewer.HorizontalScrollBarVisibility="Visible" ViewingMode="Scroll" Background="Aqua" Grid.Column="1" Grid.Row="1"  >
             <FlowDocument Name="outPutDocument" >
                 <Paragraph></Paragraph>

@@ -17,7 +17,7 @@
             <ColumnDefinition Width="56*"/>
             <ColumnDefinition Width="219*"/>
         </Grid.ColumnDefinitions>
-        <DataGrid x:Name="RallydataGrid" HorizontalAlignment="Left" Height="35" Margin="10,36,0,0" VerticalAlignment="Top" Width="851" Grid.Column="1"/>
+        <DataGrid x:Name="RallydataGrid" HorizontalAlignment="Left" Height="66" Margin="10,36,0,0" VerticalAlignment="Top" Width="851" Grid.Column="1" Grid.RowSpan="2" RenderTransformOrigin="0.496,0.864"/>
 
         <DataGrid x:Name="CompetitordataGrid" HorizontalAlignment="Left" Margin="10,48.5,0,0" VerticalAlignment="Top" Height="158" Width="506" Grid.Column="1" Grid.Row="2" />
         <DataGrid x:Name="CheckpointdataGrid" HorizontalAlignment="Right" Height="140" Margin="0,226.5,321,0" VerticalAlignment="Top" Width="133" Grid.Column="1" Grid.Row="2"/>
